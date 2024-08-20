@@ -1,4 +1,4 @@
-# Server scripts to monitorice, Cloudflare actions and backups
+# Server scripts to monitoring, Cloudflare actions and backups
 
 ## 1. CPU Monitor
 
