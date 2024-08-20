@@ -1,0 +1,5 @@
+# CLOUDFLARE_CONFIG
+CF_API_KEY="your_api_key"
+CF_ACCOUNT_ID="your_account_id"
+CF_GRAPHQL_ENDPOINT="https://api.cloudflare.com/client/v4/graphql"
+CF_ACCOUNT_NAME="website or account name to show in Telegram message"

@@ -1,0 +1,24 @@
+# TELEGRAM_CONFIG.sample
+#
+# Telegram Config sample file.
+#
+# Rename final file to TELEGRAM_CONFIG
+# and put it in the same directory as the script.
+#
+# Setting up a Telegram bot In order to be able to send messages through Telegram,
+# you need to create a bot and get its token.
+#
+# Follow these steps:
+# - Open Telegram and search for the `@BotFather` bot.
+# - Send the command /newbot to create a new bot.
+# - Follow the instructions and get the bot's `TOKEN`.
+# - Save the token as you will use it in the script (TELEGRAM_TOKEN).
+#
+# Also, you need to get your chat ID. To do this:
+# - Send a message to the bot you just created.
+# - Go to `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates`
+#   (replace `<YOUR_TOKEN>` with your token).
+#   Here you will see your chat ID in the `chat_id` field.
+
+TELEGRAM_TOKEN="123456789:ABCdefghijklmnopqrstuvwxyz"
+TELEGRAM_CHAT_ID="-123456789"
