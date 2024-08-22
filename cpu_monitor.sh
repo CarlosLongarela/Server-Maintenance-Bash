@@ -6,6 +6,9 @@ DURATION_THRESHOLD=300 # Duration  in seconds to exceed the threshold before ale
 INTERVAL=10            # Interval in seconds for checking CPU usage.
 LANGUAGE="EN"          # Language for alerts: EN (English) or ES (Spanish).
 
+# We'll change to script dir to read the correct config files.
+cd "$(dirname "$0")"
+
 # include file with Telegram variables
 source TELEGRAM_CONFIG
 
