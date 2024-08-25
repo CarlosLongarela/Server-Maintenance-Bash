@@ -1,16 +1,48 @@
 #!/bin/bash
 
+# Define path to configuration files.
+USER_CONF="$HOME/.cpu_monitor.conf"
+USER_CONF2="$HOME/cpu_monitor.conf"
+DEFAULT_CONF="/etc/cpu_monitor.conf"
+
+USER_TELEGRAM_CONF="$HOME/.telegram_api.conf"
+USER_TELEGRAM_CONF2="$HOME/telegram_api.conf"
+DEFAULT_TELEGRAM_CONF="/etc/telegram_api.conf"
+
+# Check configuration files to use.
+if [ -f "$USER_CONF" ]; then
+    CONFIG_FILE="$USER_CONF"
+elif [ -f "$USER_CONF2" ]; then
+    CONFIG_FILE="$USER_CONF2"
+elif [ -f "$DEFAULT_CONF" ]; then
+    CONFIG_FILE="$DEFAULT_CONF"
+fi
+
+# Check Telegram configuration files to use.
+if [ -f "$USER_TELEGRAM_CONF" ]; then
+    TELEGRAM_CONFIG="$USER_TELEGRAM_CONF"
+elif [ -f "$USER_TELEGRAM_CONF2" ]; then
+    TELEGRAM_CONFIG="$USER_TELEGRAM_CONF2"
+elif [ -f "$DEFAULT_TELEGRAM_CONF" ]; then
+    TELEGRAM_CONFIG="$DEFAULT_TELEGRAM_CONF"
+else
+    echo "Telegram configuration file not found."
+    exit 1
+fi
+
+# Read general configuration file.
+source "$CONFIG_FILE"
+
+# Read Telegram configuration file.
+source "$TELEGRAM_CONFIG"
+
 # Default values.
-THRESHOLD=80           # Threshold for CPU usage in percentage.
-DURATION_THRESHOLD=300 # Duration  in seconds to exceed the threshold before alerting (5 minutes).
-INTERVAL=10            # Interval in seconds for checking CPU usage.
-LANGUAGE="EN"          # Language for alerts: EN (English) or ES (Spanish).
+THRESHOLD="${THRESHOLD:-80}"                    # Default threshold for CPU usage in percentage, 80%.
+DURATION_THRESHOLD="${DURATION_THRESHOLD:-300}" # Default duration in seconds to exceed the threshold before alerting (300 seconds, 5 minutes).
+INTERVAL="${THRESHOLD:-10}"                     # Default interval in seconds for checking CPU usage, 10 seconds.
+LANGUAGE="${LANGUAGE:-EN}"                      # Default language for alerts: EN (English).
 
-# We'll change to script dir to read the correct config files.
-cd "$(dirname "$0")"
-
-# include file with Telegram variables
-source TELEGRAM_CONFIG
+SERVER_NAME=$(hostname) # Obtains the server name.
 
 # Function to show help message in English.
 show_help_en() {
@@ -21,9 +53,10 @@ show_help_en() {
     echo "  -d <duration>       Duration in seconds above the threshold before triggering an alert (default: 300 seconds)"
     echo "  -i <interval>       Check interval in seconds (default: 10 seconds)"
     echo "  -l <language>       Alert language: EN (English) or ES (Spanish) (default: EN)"
-    echo "  -h                  Show this help message in English"
-    echo "  -a                  Show this help message in Spanish"
-    exit 0
+    echo "  -h                  Show this help message in English and exit"
+    echo "  -a                  Show this help message in Spanish and exit"
+    echo "  -v                  Show the current values of the configuration and exit"
+    exit 1
 }
 
 # Function to show help message in Spanish.
@@ -35,13 +68,33 @@ show_help_es() {
     echo "  -d <duración>       Duración en segundos por encima del umbral antes de activar una alerta (por defecto: 300 segundos)"
     echo "  -i <intervalo>      Intervalo de comprobación en segundos (por defecto: 10 segundos)"
     echo "  -l <idioma>         Idioma de las alertas: EN (Inglés) or ES (Español) (por defecto: EN)"
-    echo "  -h                  Mostrar este mensaje de ayuda en inglés"
-    echo "  -a                  Mostrar este mensaje de ayuda en español"
-    exit 0
+    echo "  -h                  Mostrar este mensaje de ayuda en inglés y salir"
+    echo "  -a                  Mostrar este mensaje de ayuda en español y salir"
+    echo "  -v                  Mostrar los valores actuales de la configuración y salir"
+    exit 1
+}
+
+show_values() {
+    if [ "$LANGUAGE" == "EN" ]; then
+        echo "Current values for host: $SERVER_NAME"
+        echo "-------------------------------------------"
+        echo "Threshold: $THRESHOLD"
+        echo "Duration Threshold: $DURATION_THRESHOLD"
+        echo "Interval: $INTERVAL"
+        echo "Language: $LANGUAGE"
+    else
+        echo "Valores actuales para el host: $SERVER_NAME"
+        echo "-------------------------------------------"
+        echo "Umbral: $THRESHOLD"
+        echo "Duración umbral: $DURATION_THRESHOLD"
+        echo "Intervalo: $INTERVAL"
+        echo "Idioma: $LANGUAGE"
+    fi
+    exit 1
 }
 
 # Obtain the options we passed to the script.
-while getopts "t:d:i:l:h:a" opt; do
+while getopts "t:d:i:l:h:a:v" opt; do
     case "$opt" in
         t) THRESHOLD=$OPTARG ;;
         d) DURATION_THRESHOLD=$OPTARG ;;
@@ -49,6 +102,7 @@ while getopts "t:d:i:l:h:a" opt; do
         l) LANGUAGE=$OPTARG ;;
         h) show_help_en ;;
         a) show_help_es ;;
+        v) show_values ;;
         *) show_help_en ;;
     esac
 done
@@ -61,7 +115,6 @@ fi
 
 # Internal variables.
 above_threshold_time=0
-SERVER_NAME=$(hostname) # Obtains the server name.
 
 # Function to send a message to Telegram.
 send_telegram_message() {

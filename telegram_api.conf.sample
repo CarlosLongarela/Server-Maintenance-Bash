@@ -1,9 +1,9 @@
-# TELEGRAM_CONFIG.sample
+# telegram_api.conf.sample
 #
 # Telegram Config sample file.
 #
-# Rename final file to TELEGRAM_CONFIG
-# and put it in the same directory as the script.
+# Rename final file to /etc/telegram_api.conf
+# or .telegram_api.conf in your home directory
 #
 # Setting up a Telegram bot In order to be able to send messages through Telegram,
 # you need to create a bot and get its token.

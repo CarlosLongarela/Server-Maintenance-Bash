@@ -1,0 +1,11 @@
+# cpu_monitor.conf.sample
+#
+# CPU Monitor Service Config sample file.
+#
+# Rename final file to /etc/cpu_monitor.conf
+# or cpu_monitor.conf or .cpu_monitor.conf in your home directory
+
+THRESHOLD=80             # Threshold for CPU usage in percentage, 80%.
+DURATION_THRESHOLD=300   # Duration in seconds to exceed the threshold before alerting (300 seconds, 5 minutes).
+INTERVAL=10              # Interval in seconds for checking CPU usage, 10 seconds.
+LANGUAGE="EN"            # Language for alerts: EN (English).
