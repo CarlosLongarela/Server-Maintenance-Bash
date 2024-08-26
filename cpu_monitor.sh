@@ -94,7 +94,7 @@ show_values() {
 }
 
 # Obtain the options we passed to the script.
-while getopts "t:d:i:l:h:a:v" opt; do
+while getopts "t:d:i:l:hav" opt; do
     case "$opt" in
         t) THRESHOLD=$OPTARG ;;
         d) DURATION_THRESHOLD=$OPTARG ;;
