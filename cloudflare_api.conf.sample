@@ -1,4 +1,10 @@
-# CLOUDFLARE_CONFIG
+# cloudflare_api.conf.sample
+#
+# cloudflare Config sample file.
+#
+# Rename final file to /etc/cloudflare_api.conf
+# or .cloudflare_api.conf in your home directory
+
 CF_API_KEY="your_api_key"
 CF_ACCOUNT_ID="your_account_id"
 CF_GRAPHQL_ENDPOINT="https://api.cloudflare.com/client/v4/graphql"
