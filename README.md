@@ -24,7 +24,11 @@ Description=CPU Monitor with Telegram alert
 
 [Service]
 ExecStart=/path/to/script/cpu_monitor.sh
+# If we have problems on service start, we can log start servive.
+#ExecStart=/path/to/script/cpu_monitor.sh >> /tmp/cpu_monitor.log 2>&1
+User=root
 Restart=always
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
