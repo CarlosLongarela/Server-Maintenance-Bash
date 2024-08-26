@@ -42,6 +42,42 @@ sudo systemctl enable cpu_monitor.service
 sudo systemctl start cpu_monitor.service
 ```
 
+Reload the `systemd` services on script changes (git updates):
+
+```
+sudo systemctl daemon-reload
+sudo systemctl restart cpu_monitor.service
+```
+
+### Full porcess for update:
+
+1. Revert executable script state to non-executable:
+
+```
+git restore cpu_monitor.sh
+```
+
+2. Check that repo is up-to-date and update local repository.
+
+```
+git status
+git pull
+```
+
+3. Make script exceutable again:
+
+
+```
+chmod +x cpu_monitor.sh
+```
+
+4. Restart service.
+
+```
+sudo systemctl daemon-reload
+sudo systemctl restart cpu_monitor.service
+```
+
 ## 2. Cloudflare Firewall events
 
 ### Overview
